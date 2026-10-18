@@ -1,0 +1,26 @@
+name: Build Seth
+on:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate Xcode project
+        run: |
+          brew install xcodegen
+          xcodegen
+      - name: Build without signing
+        run: |
+          xcodebuild -project Seth.xcodeproj -scheme Seth -configuration Release \
+            -sdk iphoneos -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" build
+      - name: Package .ipa
+        run: |
+          mkdir Payload
+          cp -R build/Build/Products/Release-iphoneos/Seth.app Payload/
+          zip -qr Seth.ipa Payload
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Seth-ipa
+          path: Seth.ipa
