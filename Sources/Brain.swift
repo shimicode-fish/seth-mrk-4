@@ -22,9 +22,10 @@ final class Brain: ObservableObject {
     struct Line: Identifiable { let id = UUID(); let mine: Bool; let text: String }
     @Published var lines: [Line] = [Line(mine: false, text: "Hey, I'm Seth. What's up?")]
     @Published var thinking = false
-    @Published var model = UserDefaults.standard.string(forKey: "model") ?? "gpt-5.6-sol" {
-        didSet { UserDefaults.standard.set(model, forKey: "model") }
-    }
+   @Published var model = UserDefaults.standard.string(forKey: "model")
+    ?? "openai/gpt-oss-20b" {
+    didSet { UserDefaults.standard.set(model, forKey: "model") }
+}
     @Published var calendarOn = UserDefaults.standard.bool(forKey: "calendarOn")
     @Published var voiceOn = UserDefaults.standard.bool(forKey: "voiceOn") {
         didSet { UserDefaults.standard.set(voiceOn, forKey: "voiceOn") }
